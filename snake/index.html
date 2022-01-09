@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="script.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake</title>
+    <style>
+      
+        #container div{
+            position:absolute;  /*serve per posizionare un elemento*/
+            left:0px;   /*possiamo anche non metterlo perchè è gia inizialitazto a 0 px=Pixel*/
+            top:0px;
+            width:50px;   /*la dimensione del width inizializato a 50*/
+            height:50px;  /*la dimensione del height inizializato a 50*/
+            background:red;  /*il colore inizializzato al rosso*/
+            opacity: 0,5px; /*opacità*/
+            text-align: center;/*mette orizzontalmente il testo*/
+            line-height: 50px; /*imposta altezza della riga*/
+            font-size: 24px;/*grandezza della scritta*/
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+    </div>
+    <script>
+   var container = document.getElementById("container"),/*prendere Id per dare i comandi*/
+oDiv = container.getElementsByTagName("div");/*cosi faccendo possiamo avere tutti i div*/
+
+for(var i=oDiv.length-1; i>=0; i--){/*iniziamo dal ultimo*/
+  oDiv[i].style.left = (oDiv.length-1-i)*50+"px";/*4-1=3=0, 3-1=2=50, 2-1=1=100, 1-1=0=150*/
+
+}
+//collegare alla tastiera
+document.onkeydown=function(e){
+    //serve per cambiare posizione
+for(var i=oDiv.length-1; i>0; i--){
+    oDiv[i].style.left = oDiv[i-1].offsetLeft+"px"; // la posizione 0 diventerà 1 fino all'ultimo per destra è sinistra.
+    oDiv[i].style.top = oDiv[i-1].offsetTop+"px"; // la posizione 0 diventerà 1 fino all'ultimo per su è giù.
+}
+
+var e = window.event || e;
+switch(e.keyCode){
+  case 37:
+  oDiv[0].style.left = oDiv[0].offsetLeft-50+"px";//muovere a sinistra
+  break;
+  case 38:
+  oDiv[0].style.top= oDiv[0].offsetTop-50+"px";//muovere in alto
+  break;
+  case 39:
+      oDiv[0].style.left = oDiv[0].offsetLeft+50+"px";//muovere a destra
+  break;
+  case 40:
+  oDiv[0].style.top = oDiv[0].offsetTop+50+"px";//muovere in basso
+  break;
+ 
+  }
+}
+
+    </script>
+</body>
+</html>
