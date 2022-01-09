@@ -92,6 +92,24 @@ function moveleft() {
 function moveright() {
     redSquare.x +=30;
 }
+document.addEventListener('keydown', function(event) {
+    //left
+    if(event.keyCode == 37) {
+        animatedObject.x -= 1;
+    }
+    //top
+    else if(event.keyCode == 38) {
+        animatedObject.y -= 1;
+    }
+    //right
+    else if(event.keyCode == 39) {
+        animatedObject.x += 1;
+    }
+    //bottom
+    else if(event.keyCode == 40) {
+        animatedObject.y += 1;
+    }
+});
 
 
 function updateGameArea(){
