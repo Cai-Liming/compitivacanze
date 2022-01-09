@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="script.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake</title>
+    <style>
+      
+        #container div{
+            position:absolute;  /*serve per posizionare un elemento*/
+            left:0px;   /*possiamo anche non metterlo perchè è gia inizialitazto a 0 px=Pixel*/
+            top:0px;
+            width:50px;   /*la dimensione del width inizializato a 50*/
+            height:50px;  /*la dimensione del height inizializato a 50*/
+            background:blue;  /*il colore inizializzato al blue*/
+            opacity: 0,5px; /*opacità*/
+            text-align: center;/*mette orizzontalmente il testo*/
+            line-height: 50px; /*imposta altezza della riga*/
+            font-size: 24px;/*grandezza della scritta*/
+            color:#fff;
+        }
+        #box{
+            position:absolute;  /*serve per posizionare un elemento*/
+            left:500px;   /*possiamo anche non metterlo perchè è gia inizialitazto a 0 px=Pixel*/
+            top:300px;
+            width:50px;   /*la dimensione del width inizializato a 50*/
+            height:50px;  /*la dimensione del height inizializato a 50*/
+            background:red;  /*il colore inizializzato al rosso*/
+            opacity: 0,5px; /*opacità*/
+            text-align: center;/*mette orizzontalmente il testo*/
+            line-height: 50px; /*imposta altezza della riga*/
+            font-size: 24px;/*grandezza della scritta*/
+            color:#fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+    </div>
+    <div id ="box"></div>
+
+
+    <script>
+   var container = document.getElementById("container"),/*prendere Id per dare i comandi*/
+    oDiv = container.getElementsByTagName("div");/*cosi faccendo possiamo avere tutti i div*/
+    width =oDiv[0].offsetWidth;// inizializato sempre a 50(potremmo usare anche i numeri)
+    oBox= document.getElementById("box")//per ottenere il box
+
+for(var i=oDiv.length-1; i>=0; i--){/*iniziamo dal ultimo*/
+    oDiv[i].style.left = (oDiv.length-1-i)*50+"px";/*4-1=3=0, 3-1=2=50, 2-1=1=100, 1-1=0=150*/
+
+}
+//collegare alla tastiera
+    document.onkeydown=function(e){
+        
+        if(col(oDiv[0],oBox)){
+    //oBox.style.background="orange";//se la condizione è vera allora il cibo cambia colore
+    container.appendChild(oBox);
+
+}else{//altrimenti rimane la stessa
+    oBox.style.background="red";
+}
+
+    //serve per cambiare posizione
+for(var i=oDiv.length-1; i>0; i--){
+    oDiv[i].style.left = oDiv[i-1].offsetLeft+"px"; // la posizione 0 diventerà 1 fino all'ultimo per destra è sinistra.
+    oDiv[i].style.top = oDiv[i-1].offsetTop+"px"; // la posizione 0 diventerà 1 fino all'ultimo per su è giù.
+}
+
+ 
+
+var e = window.event || e;
+switch(e.keyCode){
+  case 37:
+  oDiv[0].style.left = oDiv[0].offsetLeft-width+"px";//muovere a sinistra
+  break;
+  case 38:
+  oDiv[0].style.top= oDiv[0].offsetTop-width+"px";//muovere in alto
+  break;
+  case 39:
+      oDiv[0].style.left = oDiv[0].offsetLeft+width+"px";//muovere a destra
+  break;
+  case 40:
+  oDiv[0].style.top = oDiv[0].offsetTop+width+"px";//muovere in basso
+  break;
+ 
+  }
+}
+//questo serve per verificare se il snake ha toccato il cibo oppure no (se la lunghezza dal bordo alla testa di snake è 100, 
+//invece la lunghezza dal bordo al cibo è 120 allora il snake non pottra mangiare il cibo )
+function col(el1, el2){
+   
+        var r1= el1.offsetLeft+el1.offsetWidth, //vedere la distanza del bordo fino al punto del quadrato (destra verso sinistra)
+            l1=el1.offsetLeft,//la distanza dal bordo al quadrato(sinistra verso destra)
+            b1= el1.offsetTop+el1.offsetHeight,//vedere la distanza del bordo fino al punto del quadrato (alto verso basso)
+            t1=el1.offsetTop;//la distanza dal bordo al quadrato (alto verso basso)
+        
+        var l2 = el2.offsetLeft,//la distanza dal bordo al quadrato (destra verso sinistra)
+            r2= el2.offsetLeft+el2.offsetWidth,//vedere la distanza del bordo fino al punto del quadrato (sinistra verso destra)
+            t2 = el2.offsetTop,//la distanza dal bordo al quadrato (basso verso alto)
+            b2=el2.offsetTop+el2.offsetHeight;//vedere la distanza del bordo fino al punto del quadrato (basso verso alto)
+
+        //se r1(lunghezza del snake) è minore o maggiore di l2(lunghezza del cibo) sarà false o true
+        if(r1<l2 || l1>r2 || b1<t2 || t1>b2){
+            return false;
+        }else{
+            return true;
+        }
+}
+
+    </script>
+</body>
+</html>
