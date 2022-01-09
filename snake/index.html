@@ -9,6 +9,7 @@
             border-bottom: none;
             border-right: none;
             position: relative;
+            
     
         }
         ul{
@@ -19,6 +20,7 @@
         border-top: none;
         border-left: none;
         float: left;
+        height: 210px;
     }
     #container > div{
         float:right;
@@ -35,6 +37,9 @@
         top: 0px;
         background: blue;
     }
+    .personBody{
+        opacity: 0.5;
+    }
     </style>
 </head>
 <body>
@@ -43,15 +48,18 @@
 
     <ul id="uls"></ul>
     <button id="btn">Start game </button>
-    <div>record:0</div>
+    <div id="box">record:0</div>
     <div id="person"></div>
 
 
     <script type="text/javascript">
         var container = $id("container"),
             timer =null,
+            food = null,
             uls= $id("uls"),
             btn=$id("btn"),
+            box = $id("box"),
+            index=0,
             person=$id("person"),
             personDiv= $tagName(person,"div"),
             lis=$tagName(uls,"li")
@@ -82,7 +90,7 @@
         }  
         function createFood(){
             var random = Math.floor(Math.random()*(lis.length-1));
-            var food = document.createElement("div");
+            food = document.createElement("div");
             food.className="food";
             food.style.width= food.style.height=datas.size+1+"px";
             food.style.left= lis[random].offsetLeft+"px";
@@ -94,9 +102,23 @@
             oPerson.style.width=oPerson.style.height= datas.size+1+"px";
             person.appendChild(oPerson);
         }
-      
+        
+        function Num(){ // cambia record
+            index+=10;
+            box.innerHTML="record:"+index;
+        }
         function movePerson(){
             timer=setInterval(function(){
+                if(col(personDiv[0],food)){
+                    food.className="personBody";
+                    person.appendChild(food);// se è giusto aggiungiamo subito al person 
+                    createFood();
+                    Num();
+                }
+                for (var i=personDiv.length-1; i>0; i--){
+                    personDiv[i].style.left = personDiv[i-1].offsetLeft+"px";
+                    personDiv[i].style.top = personDiv[i-1].offsetTop+"px";
+                }
                 switch(perDate.code){
                     case 37:
                     personDiv[0].style.left=personDiv[0].offsetLeft-(datas.size+1)+"px";
@@ -132,6 +154,26 @@
                 }
             }
         }
+        function col(el1, el2){
+   
+   var r1= el1.offsetLeft+el1.offsetWidth, //vedere la distanza del bordo fino al punto del quadrato (destra verso sinistra)
+       l1= el1.offsetLeft,//la distanza dal bordo al quadrato(sinistra verso destra)
+       b1= el1.offsetTop+el1.offsetHeight,//vedere la distanza del bordo fino al punto del quadrato (alto verso basso)
+       t1= el1.offsetTop;//la distanza dal bordo al quadrato (alto verso basso)
+   
+   var l2= el2.offsetLeft,//la distanza dal bordo al quadrato (destra verso sinistra)
+       r2= el2.offsetLeft+el2.offsetWidth,//vedere la distanza del bordo fino al punto del quadrato (sinistra verso destra)
+       t2= el2.offsetTop,//la distanza dal bordo al quadrato (basso verso alto)
+       b2= el2.offsetTop+el2.offsetHeight;//vedere la distanza del bordo fino al punto del quadrato (basso verso alto)
+
+   //se r1(lunghezza del snake) è minore o maggiore di l2(lunghezza del cibo) sarà false o true
+   if(r1<=l2 || b1<=t2 ||l1>=r2 || t1>=b2){
+       return false;
+   }else{ 
+       return true;
+   }
+}
+
         function $tagName(parend,child){
             return parend.getElementsByTagName(child);
         }
